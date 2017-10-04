@@ -13,14 +13,13 @@
 
 from functions import fileKernel
 
-
 print('===================Editor de texto txtpy===================')
 
 loop = 's'
 
 while loop =='s': 
     action = input('')
-    
+
     action = action.split()
 
     if action[0]=='create-file':
@@ -29,6 +28,8 @@ while loop =='s':
         fileKernel.fileDelete(action[1])
     elif action[0]=='textpy':
         fileKernel.textpy(action[1])
+    elif action[0]=='src-textpy':
+        fileKernel.selection_sort(action[1])
     else:
         print('Esse comando não existe ')
 
