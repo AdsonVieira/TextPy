@@ -1,6 +1,7 @@
 import os.path
 import sys
 
+
 def fileCreate(strFile): 
     if os.path.isfile('documents/'+strFile+".txt"):
         print('Esse arquivo já existe')
@@ -27,10 +28,6 @@ def textpy(strFile):
 
 def selection_sort(strFile):
 
-    palavras_recorrentes = ['gastronomia', 'culinária', 'gastronômico',
-                            'restaurante', 'cozinha', 'cardápios', 
-                            'ingredientes', 'bebidas']
-
     if verifyFile(strFile):
         fl = open('documents/'+strFile+".txt", "r")
         listtxt = fl.read()
@@ -45,40 +42,52 @@ def selection_sort(strFile):
         #transformando em array
         listtxt = listtxt.split()
 
-        
+        ## ordernando em ordem decrescente com selection sort  
         for i in range(0, len(listtxt)-1):
             imin = i
             for j in range(i+1, len(listtxt)):
-                if(listtxt[j] < listtxt[imin]):
+                if(listtxt[j] > listtxt[imin]):
                     imin = j
             aux = listtxt[imin]
             listtxt[imin] = listtxt[i]
             listtxt[i] = aux
 
+        # calculando ocorrências
         dic_palavras = {}
         for i in range(0, len(listtxt)-1):
             chave = listtxt[i]
-
             if chave in dic_palavras:
                 dic_palavras[listtxt[i]] += 1
             else:
                 dic_palavras[listtxt[i]] =1
-             
+
+
+
+        segundo_dic = list(dic_palavras.items())
+        
+        #ordernando orcorrências em ordem decrescente
+        for i in range(0,len(segundo_dic)-1):
+            for j in range(i+1,len(segundo_dic)):
+                if segundo_dic[i][1]<segundo_dic[j][1]:
+                    segundo_dic[i],segundo_dic[j]=segundo_dic[j],segundo_dic[i]
+        
 
         listtxt = "\n".join(str(x) for x in listtxt)
-        list_ocor = "Número de ocorrencias\n" + "\n".join("{}: {}".format(k, v) for k, v in dic_palavras.items()) + ""
+        segundo_dic = "\n".join(str(x) for x in segundo_dic)
+        #salvando palavras na ordem
+        salvaArquivo('palavras', listtxt)
 
-        #salvando no arquivo por ordem de ocorrencia
-        palavras= open('documents/palavras.txt', "w")
-        palavras.write(listtxt)
-        palavras.close()
+        #salvando palavras na ordem de ocorrência
+        salvaArquivo('ocorrencia',segundo_dic)
 
-        ocorrencia= open('documents/ocorrencia.txt', "w")
-        ocorrencia.write(list_ocor)
-        ocorrencia.close()
 
 def verifyFile(strFile):
     if os.path.isfile('documents/'+strFile+".txt"):
         return True
     else:
         return False
+
+def salvaArquivo(nomeArquivo, data):
+    arquivo= open('documents/'+nomeArquivo+'.txt', "w")
+    arquivo.write(data)
+    arquivo.close()
